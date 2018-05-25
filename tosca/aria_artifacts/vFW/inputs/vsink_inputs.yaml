@@ -1,0 +1,37 @@
+#Azure account
+subscription_id: 48de34f6-65a1-4d09-84b4-68b011151672
+client_id: 2ec2d2f0-bf9c-4440-b32a-885148c8db00
+tenant_id: 093bead2-1e6b-497f-af94-14af91bcd919
+client_secret: MCnj4hGh38tIlU/RHNwDS2GUWWwIs6V4tv6RIYjsiSs=
+
+sinc_vm_name: zdfw1fwl01vsinc01
+fw_vm_name: zdfw1fwl01vfw01
+vm_size: Standard_D2
+
+vm_image_offer: UbuntuServer
+
+vm_public_key_data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD5zrmH1dHgXbNwP2qbNVySScnFVcEP25HBd2VJu2PiJLDhwgHj44Lj9ZvLyRFCetqd8CAKnLV5qy37rwaCtlH/t8Qb36cUGPhegxpF2++uTY0b6K7Zb6hEMBNw3J1z+GU7OoVwZJhsNAw4t8/7WWmJA4Owo99TJkEKvhCYjBCLoC5sIvG/lJsaFIG8A5MjnBlwgSZ3FsUU+aY1KYZUztodkyv7laDMOinwSvJggKrCugsqZdVo5bhmcSFbqrZa/a/wgqeok+79W0/DLh5Tlf7By46ASDKGnFlwDshPu++I3KMU3eRz0rJLOKeIUCz7k80X0WJ6BrSS7l+IrpDXV1M5 ubuntu@aria
+
+
+azure_virtual_private_subnet_name: private_vsubnet
+azure_virtual_private_network_cidr: 172.23.3.0/24
+azure_virtual_unprotected_subnet_name: unprotected_vsubnet
+azure_virtual_unprotected_network_cidr: 172.23.0.0/24
+azure_virtual_protected_subnet_name: protected_vsubnet
+azure_virtual_protected_network_cidr: 172.23.1.0/24
+
+
+#vfw_private_ip_0 in vfw heat
+vfw_unprotected_private_ip: 172.23.0.150
+#vfw_private_ip_1 in vfw heat
+vfw_protected_private_ip: 172.23.1.50
+repo_url_blob: http://azure-servervdnsscripts.eastus.cloudapp.azure.com:8001
+install_script_version: 1.1.1
+vsn_private_ip_0: 172.23.1.100
+vsn_private_ip_1: 172.23.3.50
+dcae_collector_ip: 127.0.0.1
+dcae_collector_port: 8080
+repo_url_artifacts: https://nexus.onap.org/content/groups/public
+demo_artifacts_version: 1.1.1
+vfw_private_ip_2: 10.0.100.1
+cloud_env: openstack

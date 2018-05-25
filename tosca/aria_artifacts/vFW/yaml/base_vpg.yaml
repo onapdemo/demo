@@ -1,0 +1,452 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+
+imports:
+#  - http://www.getcloudify.org/spec/cloudify/4.0/types.yaml
+  - azure-plugin
+  - aria-1.0
+  
+metadata:
+  vendor: Amdocs
+  csarVersion: v1.0
+  csarProvider: Amdocs
+  id: vFW_A
+  version: v1.0
+  csarType: NFAR
+  name: vFW_A
+  vnfdVersion: v1.0
+  vnfmType: vnfm
+
+topology_template:
+  inputs:
+    v_sink_port:
+      type: integer
+      default: 667
+    subscription_id:
+      type: string
+    tenant_id:
+      type: string
+    client_id:
+      type: string
+    client_secret:
+      type: string
+    use_existing_vm:
+      default: False
+      type: boolean
+    pg_vm_name:
+      type: string
+      default: vPG
+    location:
+      default: eastus
+      type: string
+    vm_os_family:
+      type: string
+      default: linux
+    vm_size:
+      type: string
+      default: Standard_B1S
+    vm_image_publisher:
+      type: string
+      default: Canonical
+    vm_image_offer:
+      type: string
+      default: UbuntuServer
+    vm_image_sku:
+      type: string
+      default: 14.04.4-LTS
+    vm_image_version:
+      type: string
+      default: 14.04.201606100
+    vm_os_username:
+      type: string
+      default: ubuntu
+    vm_os_password:
+      type: string
+      default: Qwertyuiop@@1
+    vm_public_keys:
+      default:
+        keydata: { get_input: vm_public_key_data }
+        path: { get_input: vm_public_key_path }
+      type: aria.azure.datatypes.PublicKey
+    vm_public_key_data:
+      description: Public key content to pass to virtual machine
+      type: string
+    vm_public_key_path:
+      description: Path to where public key will be used
+      type: string
+      default: /home/ubuntu/.ssh/authorized_keys
+    vm_public_key_auth_only:
+      type: boolean
+      default: false
+    retry_after:
+      default: 30
+      type: integer
+    pg_public_ip_dns_setting:
+      default:
+        domainNameLabel: { get_input: pg_azure_domain_name_label }
+        fqdn: { get_input: pg_azure_domain_fqdn }
+      type: aria.azure.datatypes.PublicIPAddressDnsSettings
+    use_existing_resource_group:
+      default: True 
+      type: boolean
+    use_existing_security_group:
+      default: True
+      type: boolean
+    use_existing_public_subnet:
+      default: True
+      type: boolean
+    use_existing_virtual_public_network:
+      default: True
+      type: boolean
+    use_existing_private_subnet:
+      default: True
+      type: boolean
+    use_existing_virtual_private_network:
+      default: True
+      type: boolean
+    use_existing_unprotected_subnet:
+      default: True
+      type: boolean
+    use_existing_protected_subnet:
+      default: True
+      type: boolean
+    use_existing_virtual_unprotected_network:
+      default: True
+      type: boolean
+    azure_configuration:
+      default:
+        subscription_id: { get_input: subscription_id }
+        tenant_id: { get_input: tenant_id }
+        client_id: { get_input: client_id }
+        client_secret: { get_input: client_secret }
+      type: aria.azure.datatypes.Config
+    pg_azure_domain_name_label:
+      default: vpptestapp
+      type: string
+    pg_azure_domain_fqdn:
+      type: string
+      default: vpptestapp.eastus.cloudapp.azure.com
+    azure_storage_account:
+      type: string
+      default: azurevfwstoragecommon
+    azure_security_group:
+      type: string
+      default: vfw_network_security_group
+    azure_virtual_public_subnet_name:
+      type: string
+      default: public_vsubnet
+    azure_virtual_public_network_cidr:
+      type: string
+      default: 172.23.2.0/24
+    azure_virtual_private_subnet_name:
+      type: string
+      default: ONAP-CHORUS-private-vsubnet
+    azure_virtual_unprotected_subnet_name:
+      type: string
+      default: onap-unprotected-vsubnet
+    azure_virtual_public_network_name:
+      type: string
+      default: onap-public-vnet
+    azure_virtual_private_network_name:
+      type: string
+      default: private_vfw_net
+    azure_virtual_network_name:
+      type: string
+      default: private_vnet
+    azure_virtual_network_cidr:
+      type: string
+      default: 172.23.0.0/16
+    azure_virtual_protected_subnet_name:
+      type: string
+      default: onap-protected-vsubnet
+    azure_virtual_protected_network_cidr:
+      type: string
+    azure_virtual_unprotected_network_cidr:
+      type: string
+    azure_virtual_private_network_cidr:
+      type: string
+    azure_resource_group_name:
+      type: string
+      default: ONAP-vFW
+    vfw_unprotected_private_ip:
+      type: string
+    repo_url_blob:
+      type: string
+    install_script_version:
+      type: string
+    vfw_protected_private_ip:
+      type: string
+    vsn_private_ip_0:
+      type: string
+    dcae_collector_ip:
+      type: string
+    dcae_collector_port:
+      type: integer
+    repo_url_artifacts:
+      type: string
+    demo_artifacts_version:
+      type: string
+    vfw_private_ip_2:
+      type: string
+    vpg_private_ip_1:
+      type: string
+    cloud_env:
+      type: string
+    vpkg_unprotected_private_ip:
+      type: string
+    vm_resource_config_hardware_profile:
+      default:
+        vmSize: { get_input: vm_size }
+      type: aria.azure.datatypes.HardwareProfile
+    vm_resource_config_storage_profile:
+      default:
+        imageReference:
+          publisher: { get_input: vm_image_publisher }
+          offer: { get_input: vm_image_offer }
+          sku: { get_input: vm_image_sku }
+          version: { get_input: vm_image_version }
+      type: aria.azure.datatypes.StorageProfile
+    onap_virtual_network_config:
+      default:
+        addressSpace:
+          addressPrefixes: 
+            - { get_input: azure_virtual_network_cidr }
+      type: aria.azure.datatypes.VirtualNetworkConfig
+    vpkg_unprotected_ip_config:
+      default:
+        privateIPAddress: { get_input: vpkg_unprotected_private_ip }
+        privateIPAllocationMethod: Static
+      type: aria.azure.datatypes.IPConfigurationConfig
+    onap_virtual_unprotected_subnet_config:
+      default:
+        addressPrefix: { get_input: azure_virtual_unprotected_network_cidr }
+#        networkSecurityGroup: { get_input: onap_network_security_group }
+      type: aria.azure.datatypes.SubnetConfig
+    onap_virtual_protected_subnet_config:
+      default:
+        addressPrefix: { get_input: azure_virtual_protected_network_cidr }
+#        networkSecurityGroup: { get_input: onap_network_security_group }
+      type: aria.azure.datatypes.SubnetConfig
+    onap_virtual_public_subnet_config:
+      default:
+        addressPrefix: { get_input: azure_virtual_public_network_cidr }
+#        networkSecurityGroup: { get_input: onap_network_security_group }
+      type: aria.azure.datatypes.SubnetConfig
+    pg_vm_resource_config_os_profile:
+      default:
+        computerName: { get_input: pg_vm_name }
+        adminUserName: { get_input: vm_os_username }
+        adminPassword: { get_input: vm_os_password }
+        linuxConfiguration:
+          ssh:
+            publicKeys: 
+              - { get_input: vm_public_keys }
+          disablePasswordAuthentication: { get_input: vm_public_key_auth_only }
+      type: aria.azure.datatypes.OSProfile
+    pg_vm_resource_config:
+      default:
+        hardwareProfile: { get_input: vm_resource_config_hardware_profile }
+        storageProfile: { get_input: vm_resource_config_storage_profile }
+        osProfile: { get_input: pg_vm_resource_config_os_profile }
+      type: aria.azure.datatypes.VirtualMachineConfig
+
+    ssh_allow_rule:
+      type: aria.azure.datatypes.NetworkSecurityRuleConfig
+      default:  
+        description: SSH access
+        protocol: Tcp
+        sourcePortRange: '*'
+        destinationPortRange: '22'
+        sourceAddressPrefix: '*'
+        destinationAddressPrefix: '*'
+        priority: 1001
+        access: Allow
+        direction: Inbound
+
+
+    http_allow_rule:
+      type: aria.azure.datatypes.NetworkSecurityRuleConfig
+      default:
+        description: HTTP access
+        protocol: Tcp
+        sourcePortRange: '*'
+        destinationPortRange: { get_input: v_sink_port }
+        sourceAddressPrefix: '*'
+        destinationAddressPrefix: '*'
+        priority: 1000
+        access: Allow
+        direction: Inbound
+
+  node_templates:
+    onap_resource_group:
+      type: aria.azure.nodes.ResourceGroup
+      properties:
+        azure_config: { get_input: azure_configuration }
+        use_external_resource: { get_input: use_existing_resource_group }
+        name: { get_input: azure_resource_group_name }
+        location: { get_input: location }
+        
+    onap_virtual_public_subnet:
+      type: aria.azure.nodes.network.Subnet
+      properties:
+        name: { get_input: azure_virtual_public_subnet_name }
+        resource_group_name: { get_input: azure_resource_group_name }
+        resource_config: { get_input: onap_virtual_public_subnet_config }
+        virtual_network_name: { get_input: azure_virtual_network_name }
+        location: { get_input: location }
+        azure_config: { get_input: azure_configuration }
+        use_external_resource: { get_input: use_existing_public_subnet }
+
+    onap_virtual_unprotected_private_subnet:
+      type: aria.azure.nodes.network.Subnet
+      properties:
+        name: { get_input: azure_virtual_unprotected_subnet_name }
+        resource_group_name: { get_input: azure_resource_group_name }
+        resource_config: { get_input: onap_virtual_unprotected_subnet_config }
+        virtual_network_name: { get_input: azure_virtual_network_name }
+        location: { get_input: location }
+        azure_config: { get_input: azure_configuration }
+        use_external_resource: { get_input: use_existing_unprotected_subnet }    
+
+    onap_network_security_group:
+      type: aria.azure.nodes.network.NetworkSecurityGroup
+      properties:
+        name: { get_input: azure_security_group }
+        location: { get_input: location }
+        azure_config: { get_input: azure_configuration }
+        use_external_resource: { get_input: use_existing_security_group }
+        resource_group_name: { get_input: azure_resource_group_name }
+      requirements:
+        - resource_group: onap_resource_group
+
+    onap_storage_account:
+      type: aria.azure.nodes.storage.StorageAccount
+      properties:
+        name: { get_input: azure_storage_account }
+        location: { get_input: location }
+        retry_after: { get_input: retry_after }
+        resource_group_name: { get_input: azure_resource_group_name }
+        azure_config: { get_input: azure_configuration }
+        use_external_resource: False
+        resource_config:
+          accountType: Standard_LRS
+
+    pg_management_public_ip:
+      type: aria.azure.nodes.network.PublicIPAddress
+      properties:
+        name: pg_management_ip
+        location: { get_input: location }
+        retry_after: { get_input: retry_after }
+        azure_config: { get_input: azure_configuration }
+        resource_group_name: { get_input: azure_resource_group_name }
+        resource_config:
+          publicIPAllocationMethod: Dynamic
+          dnsSettings: { get_input: pg_public_ip_dns_setting }
+      requirements:
+        - resource_group: onap_resource_group
+
+    onap_pkg_nic_management_public_ip_config:
+      type: aria.azure.nodes.network.IPConfiguration
+      properties:
+        name: vpp_management_ip_config
+        location: { get_input: location }
+        retry_after: { get_input: retry_after }
+        azure_config: { get_input: azure_configuration }
+        resource_group_name: { get_input: azure_resource_group_name }
+        resource_config:
+          privateIPAllocationMethod: Dynamic
+      requirements:
+        - subnet: onap_virtual_public_subnet
+        - ipaddress: pg_management_public_ip
+
+
+    onap_pkg_nic_management_public:
+      type: aria.azure.nodes.network.NetworkInterfaceCard
+      properties:
+        name: vpp_management_nic
+        location: { get_input: location }
+        retry_after: { get_input: retry_after }
+        resource_group_name: { get_input: azure_resource_group_name }
+        primary: True
+        resource_config:
+          networkSecurityGroups: { get_input: azure_security_group }
+          dnsSettings:
+            internalDnsNameLabel: { get_input: pg_vm_name }
+        use_external_resource: False
+        azure_config: { get_input: azure_configuration }
+      requirements:
+        - ip_config: onap_pkg_nic_management_public_ip_config
+        - security_group: onap_network_security_group
+
+
+    onap_vpkg_unprotected_ip_config:
+      type: aria.azure.nodes.network.IPConfiguration
+      properties:
+        name: vpkg_unprotected_ip_config
+        location: { get_input: location }
+        retry_after: { get_input: retry_after }
+        azure_config: { get_input: azure_configuration }
+        resource_group_name: { get_input: azure_resource_group_name }
+        resource_config: { get_input: vpkg_unprotected_ip_config }
+      requirements:
+        - subnet: onap_virtual_unprotected_private_subnet
+
+    onap_vpkg_unprotected_nic:
+      type: aria.azure.nodes.network.NetworkInterfaceCard
+      properties:
+        name: vpkg_unprotected_nic
+        location: { get_input: location }
+        retry_after: { get_input: retry_after }
+        resource_group_name: { get_input: azure_resource_group_name }
+        primary: False
+        resource_config:
+          networkSecurityGroups: { get_input: azure_security_group }
+          ipConfigurations: vpkg_unprotected_ip_config
+        use_external_resource: False
+        azure_config: { get_input: azure_configuration }
+      requirements:
+        - ip_config: onap_vpkg_unprotected_ip_config
+        - security_group: onap_network_security_group
+
+    pg_vm:
+      type: aria.azure.nodes.compute.VirtualMachine 
+      properties:
+        azure_config: { get_input: azure_configuration }
+        use_external_resource: { get_input: use_existing_vm }
+        name: { get_input: pg_vm_name }
+        location: { get_input: location }
+        os_family: { get_input: vm_os_family }
+        resource_config: { get_input: pg_vm_resource_config }
+        resource_group_name: { get_input: azure_resource_group_name }
+        retry_after: { get_input: retry_after } 
+        agent_config:
+          install_method: none
+      requirements:
+      - nic: onap_pkg_nic_management_public
+      - nic: onap_vpkg_unprotected_nic
+
+    vpg_software_install:
+      type: tosca.nodes.WebApplication
+      requirements:
+        - host: pg_vm
+      interfaces:
+        Standard:
+          start:
+            implementation:
+              primary: scripts/vpg-azure.sh
+              dependencies:
+                - "ssh.user > { get_input: vm_os_username }"
+                - "ssh.password > { get_input: vm_os_password }"
+                - "ssh.address > { get_input: pg_azure_domain_fqdn }"
+                - "ssh.use_sudo > True"
+                - "process.env.vfw_unprotected_private_ip > { get_input: vfw_unprotected_private_ip }"
+                - "process.env.azure_virtual_protected_network_cidr > { get_input: azure_virtual_protected_network_cidr }"
+                - "process.env.vsn_private_ip_0 > { get_input: vsn_private_ip_0 }"
+                - "process.env.repo_url_blob > { get_input: repo_url_blob }"
+                - "process.env.repo_url_artifacts > { get_input: repo_url_artifacts }"
+                - "process.env.demo_artifacts_version > { get_input: demo_artifacts_version }"
+                - "process.env.install_script_version > { get_input: install_script_version }"
+                - "process.env.vpkg_unprotected_private_ip > { get_input: vpkg_unprotected_private_ip }"
+                - "process.env.vpg_private_ip_1 > { get_input: vpg_private_ip_1 }"
+                - "process.env.azure_virtual_unprotected_network_cidr > { get_input: azure_virtual_unprotected_network_cidr }"
+                - "process.env.azure_virtual_private_network_cidr > { get_input: azure_virtual_private_network_cidr }"
+                - "process.env.cloud_env > { get_input: cloud_env }"

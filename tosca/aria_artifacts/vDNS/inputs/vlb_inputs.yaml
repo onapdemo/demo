@@ -1,0 +1,42 @@
+#Azure account
+subscription_id: 48de34f6-65a1-4d09-84b4-68b011151672
+client_id: 2ec2d2f0-bf9c-4440-b32a-885148c8db00
+tenant_id: 093bead2-1e6b-497f-af94-14af91bcd919
+client_secret: MCnj4hGh38tIlU/RHNwDS2GUWWwIs6V4tv6RIYjsiSs=
+
+
+dns_vm_name: zdfw1lb01dns01
+lb_vm_name: zdfw1lb01lb01
+pg_vm_name: zdfw1lb01pg01
+vm_size: Standard_D2
+
+vm_image_offer: UbuntuServer
+
+
+vm_public_key_data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgSU3gOEjCY0gDKgrwovMqW7aNBCxybH9kpDYr54+LDGJbISQlJr5cKR5fr4EUMy7/Ix7ZnS0Ja1XCfWNrYonRfbI/Ma/MvdevqJ3KgK6QkNXGQneRd+1A+GnmqIP5hd9cEco/TB2pnwTaFGkKwxWKhOaTvKHf2OFfOUf0QRAJ7Tj7YgbT1409LOfWAo4H4Cju3uiQKPEJ1RuFdPfDfCBIb4vHKbzS7IUZP0Apztk+jB4gH/4tDU0g6acffuqsZapk+4tS6b1ZBoUzaG8Bw8klXVXAiG0ucGdky0lETgWws7BEvmn59VlUtyJGfl1CY4hRd6zmd2CqmdGTsTHn7iDd ubuntu@aria
+
+
+
+azure_virtual_vlb_vdns_subnet_name: vlb_vdns_vsubnet
+azure_virtual_vlb_vdns_network_cidr: 172.23.10.0/24
+azure_virtual_vpg_vlb_subnet_name: vpg_vlb_vsubnet
+azure_virtual_vpg_vlb_network_cidr: 172.23.9.0/24
+azure_virtual_private_subnet_name: public_vsubnet
+azure_virtual_private_network_cidr: 172.23.8.0/24
+
+
+
+vlb_private_ip_0: 172.23.10.111
+vlb_private_ip_1: 172.23.8.1
+vlb_private_ip_2: 172.23.9.111
+repo_url_blob: http://azure-servervdnsscripts.eastus.cloudapp.azure.com:8001
+install_script_version: 1.1.1
+vdns_private_ip_0: 172.23.10.211
+vdns_private_ip_1: 172.23.8.3
+vpg_private_ip_0: 172.23.9.110
+vpg_private_ip_1: 172.23.8.2
+dcae_collector_ip: 127.0.0.1
+dcae_collector_port: 8080
+repo_url_artifacts: https://nexus.onap.org/content/groups/staging
+demo_artifacts_version: 1.2.0
+cloud_env: azure

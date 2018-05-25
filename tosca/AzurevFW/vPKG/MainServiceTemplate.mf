@@ -1,0 +1,8 @@
+metadata:
+    vnf_product_name: vPG_A
+    vnf_provider_id: Amdocs
+    vnf_package_version: 1.0
+    vnf_release_data_time: 2018.01.01T10:00+03:00
+
+source: MainServiceTemplate.yaml
+

@@ -1,0 +1,222 @@
+
+metadata:
+  vendor: Amdocs
+  csarVersion: v1.0
+  csarProvider: Amdocs
+  id: vFW_A
+  version: v1.0
+  csarType: NFAR
+  name: vFW_A
+  vnfdVersion: v1.0
+  vnfmType: vnfm
+
+topology_template:
+  inputs:
+    vfw_pri_ip_address:
+     type: string
+     description: IP address to be used by FW for Private Network for vFW
+     default: 10.10.100.4
+    vfw_pub_ip_address:
+     type: string
+     description: IP adress to be used by FW for Public Network for vFW
+     default: 10.247.224.5
+    vfw_unproc_ip_address:
+     type: string
+     description: IP adress to be used by FW for Unproctected Network for vFW
+     default: 192.168.10.6
+    vfw_proc_ip_address:
+     type: string
+     description: IP adress to be used by FW for Unproctected Network for vFW
+     default: 192.168.20.10
+    vsinc_pri_ip_address:
+     type: string
+     description: IP address to be used by SINC for Private Network
+     default: 10.10.100.6
+    vsinc_pub_ip_address:
+     type: string
+     description: IP adress to be used by SINC for Public Network
+     default: 10.247.224.9
+    vsinc_proc_ip_address:
+     type: string
+     description: IP adress to be used by SINC for Proctected Network
+     default: 192.168.20.15
+    priv_network_name:
+     type: string
+     description: Network Name of Private Network for vFW
+     default: vFW_Private
+    pub_network_name:
+     type: string
+     description: Network Name of Public Network for vFW
+     default: vFW_Public
+    unproc_network_name:
+     type: string
+     description: Network Name of Unproctected Network for vFW
+     default: vFW_Unprotected
+    proc_network_name:
+     type: string
+     description: Network Name of Unproctected Network for vFW
+     default: vFW_Protected
+    vfw_vm_flavor_name:
+     type: string
+     description: Flavor Name for vFW vm 
+     default: m1.medium
+    vsinc_vm_flavor_name:
+     type: string
+     description: Flavor Name for vSINC vm 
+     default: m1.medium
+    pub_network_cidr:
+     type: string
+     description: Cidr Name for Public Network
+     default: 10.247.224.0/24
+    priv_network_cidr:
+     type: string
+     description: Cidr Name for Private Network
+     default: 10.10.100.0/24
+    proc_network_cidr:
+     type: string
+     description: Cidr Name for Protected Network
+     default: 192.168.20.0/24
+    unproc_network_cidr:
+     type: string
+     description: Cidr Name for Unprotected network
+     default: 192.168.10.0/24
+    pub_network_id:
+     type: string
+     description: Network ID for Public network
+     default: 192.168.10.0/24
+    priv_network_id:
+     type: string
+     description: Network ID for Private network
+     default: 192.168.10.0/24
+    proc_network_id:
+     type: string
+     description: Network ID for Protected network
+     default: 192.168.10.0/24
+    unproc_network_id:
+     type: string
+     description: Network ID for Unprotected network
+     default: 192.168.10.0/24
+  node_templates:
+    vfw_virtual_machine:
+      type: tosca.nodes.SoftwareComponent
+      artifacts:
+        vfw_vm_image:
+          file: images/fedora-18-x86_64.qcow2
+          type: tosca.artifacts.Deployment.Image.VM.QCOW2
+      requirements:
+        - host: vFW
+    vsinc_virtual_machine:
+      type: tosca.nodes.SoftwareComponent
+      artifacts:
+        vsinc_vm_image:
+          file: images/fedora-18-x86_64.qcow3
+          type: tosca.artifacts.Deployment.Image.VM.QCOW2
+      requirements:
+        - host: vSINC
+    vFW:
+      capabilities: 
+        host:
+          properties:    
+            num_cpus: 2
+            mem_size: 4 MB
+            name: { get_input: vfw_vm_flavor_name }
+      type: tosca.nodes.Compute
+    vSINC:
+      capabilities: 
+        host:
+          properties:    
+            num_cpus: 2
+            mem_size: 4 MB
+            name: { get_input: vsinc_vm_flavor_name }
+      type: tosca.nodes.Compute
+    vfw_pub_cpd:
+      properties:
+        ip_address: { get_input: vfw_pub_ip_address }
+      requirements:
+      - link: pub_network
+      - binding: vFW
+      type: tosca.nodes.network.Port
+    vfw_unproc_cpd:
+      properties:
+        ip_address: { get_input: vfw_unproc_ip_address }
+      requirements:
+      - link: unproc_network
+      - binding: vFW
+      type: tosca.nodes.network.Port      
+    vfw_priv_cpd:
+      properties:
+       ip_address: { get_input: vfw_pri_ip_address }
+      requirements:
+      - link: priv_network
+      - binding: vFW
+      type: tosca.nodes.network.Port
+    vfw_proc_cpd:
+      properties:
+       ip_address: { get_input: vfw_proc_ip_address }
+      requirements:
+      - link: proc_network
+      - binding: vFW
+      type: tosca.nodes.network.Port
+    vsinc_pub_cpd:
+      properties:
+        ip_address: { get_input: vsinc_pub_ip_address }
+      requirements:
+      - link: pub_network
+      - binding: vSINC
+      type: tosca.nodes.network.Port
+    vsinc_proc_cpd:
+      properties:
+        ip_address: { get_input: vsinc_proc_ip_address }
+      requirements:
+      - link: proc_network
+      - binding: vSINC
+      type: tosca.nodes.network.Port      
+    vsinc_cpd:
+      properties:
+       ip_address: { get_input: vsinc_pri_ip_address }
+      requirements:
+      - link: priv_network
+      - binding: vSINC
+      type: tosca.nodes.network.Port
+    pub_network:
+      properties:
+        network_name: { get_input: pub_network_name }
+        network_id: { get_input: pub_network_id }
+        cidr: { get_input: pub_network_cidr }
+        ip_version: 4
+      type: tosca.nodes.network.Network
+    unproc_network:
+      properties:
+        network_name: { get_input: unproc_network_name }
+        network_id: { get_input: unproc_network_id }
+        cidr: { get_input: unproc_network_cidr }
+        ip_version: 4
+      type: tosca.nodes.network.Network      
+    priv_network:
+      properties:
+       network_name: { get_input: priv_network_name }
+       network_id: { get_input: priv_network_id }
+       cidr: { get_input: priv_network_cidr }
+       ip_version: 4
+      type: tosca.nodes.network.Network
+    proc_network:
+      properties:
+       network_name: { get_input: proc_network_name }
+       network_id: { get_input: proc_network_id }
+       cidr: { get_input: proc_network_cidr }
+       ip_version: 4
+      type: tosca.nodes.network.Network
+  groups:
+    SimpleVsinc..base_vfw..module-0:
+      type: org.openecomp.groups.VfModule
+      properties:
+        min_vf_module_instances: 1
+        vf_module_label: base_vfw
+        max_vf_module_instances: 1
+        vfc_list:
+        vf_module_type: Base
+        vf_module_description:
+        initial_count: 1
+        volume_group: false
+        availability_zone_count:
+tosca_definitions_version: tosca_simple_yaml_1_0
