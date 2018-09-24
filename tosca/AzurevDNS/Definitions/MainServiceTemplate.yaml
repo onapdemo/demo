@@ -10,108 +10,135 @@ metadata:
   vnfdVersion: v1.0
   vnfmType: vnfm
 
+imports:
+- openecomp_heat_index:
+    file: openecomp-heat/_index.yml
 topology_template:
   inputs:
-    vpg_pri_ip_address:
-     type: string
-     description: IP address to be used by PG for Private Network
-     default: 10.10.100.1
-    vlb_pri_ip_address:
-     type: string
-     description: IP address to be used by PG for Private Network
-     default: 10.10.100.2
-    vdns_pri_ip_address:
-     type: string
-     description: IP address to be used by PG for Private Network
-     default: 10.10.100.3
-    vpg_pub_ip_address:
-     type: string
-     description: IP adress to be used by PG for Public Network
-     default: 10.247.224.2
-    vlb_pub_ip_address:
-     type: string
-     description: IP adress to be used by LB for Public Network
-     default: 10.247.224.3
-    vdns_pub_ip_address:
-     type: string
-     description: IP adress to be used by PG for Public Network
-     default: 10.247.224.4
-    vpg_vlb_ip_address:
-     type: string
-     description: IP adress to be used by PG for vPG-vLB Network
-     default: 192.168.10.3
-    vlb_vpg_ip_address:
-     type: string
-     description: IP adress to be used by LB for  vLB-vPG Network
-     default: 192.168.10.4
-    vlb_vdns_ip_address:
-     type: string
-     description: IP adress to be used by LB for  vLB-vDNS Network
-     default: 192.168.10.5
-    vdns_vlb_ip_address:
-     type: string
-     description: IP adress to be used by LB for  vDNS-vLB Network
-     default: 192.168.10.6
-    priv_network_name:
-     type: string
-     description: Network Name of Private Network for vDNS
-     default: vDNS_Private
-    pub_network_name:
-     type: string
-     description: Network Name of Public Network for vDNS
-     default: vDNS_Public
-    vpg_vlb_network_name:
-     type: string
-     description: Network Name of vPG-vLB Network
-     default: vPG-vLB Network
-    vlb_vdns_network_name:
-     type: string
-     description: Network Name of vLB-vDNS Network
-     default: vLB-vDNS Network
+    vpg_image_name:
+      type: string
+      description: Image Name for vPG vm 
+      default: fedora-18-x86_64.qcow1
+    vpg_flavor_name:
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
     vpg_vm_flavor_name:
-     type: string
-     description: Flavor Name for vPG vm 
-     default: m1.medium
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
+    vlb_image_name:
+      type: string
+      description: Image Name for vPG vm 
+      default: fedora-18-x86_64.qcow1
+    vlb_flavor_name:
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
     vlb_vm_flavor_name:
-     type: string
-     description: Flavor Name for vLB vm 
-     default: m1.medium
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
+    vdns_image_name:
+      type: string
+      description: Image Name for vPG vm 
+      default: fedora-18-x86_64.qcow1
+    vdns_flavor_name:
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
     vdns_vm_flavor_name:
-     type: string
-     description: Flavor Name for vDNS vm 
-     default: m1.medium
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
+    vpg_pub_ip_address:
+      type: string
+      description: IP adress to be used by PG for Public Network
+      default: 10.247.224.2
+    vlb_pub_ip_address:
+      type: string
+      description: IP adress to be used by PG for Public Network
+      default: 10.247.224.3
+    vdns_pub_ip_address:
+      type: string
+      description: IP adress to be used by PG for Public Network
+      default: 10.247.224.4
+    pub_network_name:
+      type: string
+      description: Network Name of Public Network for vDNS
+      default: vDNS_Public
     pub_network_cidr:
-     type: string
-     description: Cidr Name for Public Network
-     default: 10.247.224.0/24
-    priv_network_cidr:
-     type: string
-     description: Cidr Name for Private Network
-     default: 10.10.100.0/24
-    vpg_vlb_network_cidr:
-     type: string
-     description: Cidr Name for vPG-vLB Network
-     default: 192.168.10.0/24
-    vlb_vdns_network_cidr:
-     type: string
-     description: Cidr Name for vLB-vDNS Network
-     default: 192.168.20.0/24
+      type: string
+      description: Cidr Name for Public Network
+      default: 10.247.224.0/24
     pub_network_id:
-     type: string
-     description: Network ID for Public network
-     default: 6f0d8acc-57b5-42f8-9cb6-c71deb950488
+      type: string
+      description: Network ID for Public network
+      default: 6f0d8acc-57b5-42f8-9cb6-c71deb950488
+    priv_network_name:
+      type: string
+      description: Network Name of Public Network for vDNS
+      default: vDNS_Private
+    priv_network_cidr:
+      type: string
+      description: Cidr Name for Public Network
+      default: 10.10.100.0/24
     priv_network_id:
-     type: string
-     description: Network ID for Private network
-     default: 6f0d8acc-57b5-42f8-9cb6-c71deb950490
+      type: string
+      description: Network ID for Public network
+      default: 6f0d8acc-57b5-42f8-9cb6-c71deb950490
+    vpg_priv_ip_address:
+      type: string
+      description: IP adress to be used by PG for Private Network
+      default: 10.10.100.1
+    vlb_priv_ip_address:
+      type: string
+      description: IP adress to be used by LB for Private Network
+      default: 10.10.100.2
+    vdns_priv_ip_address:
+      type: string
+      description: IP adress to be used by DNS for Private Network
+      default: 10.10.100.3
+    vpg_vlb_network_name:
+      type: string
+      description: Network Name of vPG-vLB Network for vDNS
+      default: vLB-vDNS Network
+    vpg_vlb_network_cidr:
+      type: string
+      description: Cidr Name for vPG-vLB Network
+      default: 192.168.10.0/24
     vpg_vlb_network_id:
-     type: string
-     description: Network ID for vPG-vLB Network
-     default: 6f0d8acc-57b5-42f8-9cb6-c71deb950492
+      type: string
+      description: Network ID for vPG-vLB network
+      default: 6f0d8acc-57b5-42f8-9cb6-c71deb950492
+    vpg_vlb_ip_address:
+      type: string
+      description: IP adress to be used by PG for vPG-vLB Network
+      default: 192.168.10.3
+    vlb_vpg_ip_address:
+      type: string
+      description: IP adress to be used by PG for vPG-vLB Network
+      default: 192.168.10.4
+    vlb_vdns_network_name:
+      type: string
+      description: Network Name of vLB-vDNS Network for vDNS
+      default: vLB-vDNS Network
+    vlb_vdns_network_cidr:
+      type: string
+      description: Cidr Name for vPG-vLB Network
+      default: 192.168.10.0/24
     vlb_vdns_network_id:
-     type: string
-     description: Network ID for vPG-vLB Network
-     default: 6f0d8acc-57b5-42f8-9cb6-c71deb950494
+      type: string
+      description: Network ID for vPG-vLB network
+      default: 6f0d8acc-57b5-42f8-9cb6-c71deb950492
+    vlb_vdns_ip_address:
+      type: string
+      description: IP adress to be used by PG for vPG-vLB Network
+      default: 192.168.10.5
+    vdns_vlb_ip_address:
+      type: string
+      description: IP adress to be used by PG for vPG-vLB Network
+      default: 192.168.10.6
   node_templates:
     vpg_virtual_machine:
       type: tosca.nodes.SoftwareComponent
@@ -138,99 +165,38 @@ topology_template:
       requirements:
         - host: vDNS
     vPG:
+      properties:
+        flavor: {get_input: vpg_flavor_name}
+        image: {get_input: vpg_image_name}
       capabilities: 
         host:
           properties:    
             num_cpus: 2
             mem_size: 4 MB
             name: { get_input: vpg_vm_flavor_name }
-      type: tosca.nodes.Compute
+      type: org.openecomp.resource.vfc.nodes.heat.nova.Server
     vLB:
+      properties:
+        flavor: {get_input: vlb_flavor_name}
+        image: {get_input: vlb_image_name}
       capabilities: 
         host:
           properties:    
             num_cpus: 2
             mem_size: 4 MB
             name: { get_input: vlb_vm_flavor_name }
-      type: tosca.nodes.Compute
+      type: org.openecomp.resource.vfc.nodes.heat.nova.Server
     vDNS:
+      properties:
+        flavor: {get_input: vdns_flavor_name}
+        image: {get_input: vdns_image_name}
       capabilities: 
         host:
           properties:    
             num_cpus: 2
             mem_size: 4 MB
             name: { get_input: vdns_vm_flavor_name }
-      type: tosca.nodes.Compute       
-    vpg_pub_cpd:
-      properties:
-        ip_address: { get_input: vpg_pub_ip_address }
-      requirements:
-      - link: pub_network
-      - binding: vPG
-      type: tosca.nodes.network.Port
-    vpg_priv_cpd:
-      properties:
-       ip_address: { get_input: vpg_pri_ip_address }
-      requirements:
-      - link: priv_network
-      - binding: vPG
-      type: tosca.nodes.network.Port
-    vpg_vlb_cpd:
-      properties:
-       ip_address: { get_input: vpg_vlb_ip_address }
-      requirements:
-      - link: vPG_vLB_network
-      - binding: vPG
-      type: tosca.nodes.network.Port
-    vlb_pub_cpd:
-      properties:
-        ip_address: { get_input: vlb_pub_ip_address }
-      requirements:
-      - link: pub_network
-      - binding: vLB
-      type: tosca.nodes.network.Port
-    vlb_priv_cpd:
-      properties:
-       ip_address: { get_input: vlb_pri_ip_address }
-      requirements:
-      - link: priv_network
-      - binding: vLB
-      type: tosca.nodes.network.Port
-    vlb_vpg_cpd:
-      properties:
-       ip_address: { get_input: vlb_vpg_ip_address }
-      requirements:
-      - link: vPG_vLB_network
-      - binding: vLB
-      type: tosca.nodes.network.Port
-    vlb_vdns_cpd:
-      properties:
-       ip_address: { get_input: vlb_vdns_ip_address }
-      requirements:
-      - link: vLB_vDNS_network
-      - binding: vLB
-      type: tosca.nodes.network.Port
-    vdns_pub_cpd:
-      properties:
-        ip_address: { get_input: vdns_pub_ip_address }
-      requirements:
-      - link: pub_network
-      - binding: vDNS
-      type: tosca.nodes.network.Port
-    vdns_priv_cpd:
-      properties:
-       ip_address: { get_input: vdns_pri_ip_address }
-      requirements:
-      - link: priv_network
-      - binding: vDNS
-      type: tosca.nodes.network.Port
-    vdns_vlb_cpd:
-      properties:
-       ip_address: { get_input: vdns_vlb_ip_address }
-      requirements:
-      - link: vLB_vDNS_network
-      - binding: vDNS
-      type: tosca.nodes.network.Port
+      type: org.openecomp.resource.vfc.nodes.heat.nova.Server
     pub_network:
       properties:
         network_name: { get_input: pub_network_name }
@@ -238,13 +204,67 @@ topology_template:
         cidr: { get_input: pub_network_cidr }
         ip_version: 4
       type: tosca.nodes.network.Network
+    vpg_pub_cpd:
+      properties:
+        ip_address: { get_input: vpg_pub_ip_address }
+      requirements:
+      - link: 
+          node: pub_network
+      - binding: 
+          node: vPG
+      type: tosca.nodes.network.Port
+    vlb_pub_cpd:
+      properties:
+        ip_address: { get_input: vlb_pub_ip_address }
+      requirements:
+      - link: 
+          node: pub_network
+      - binding: 
+          node: vLB
+      type: tosca.nodes.network.Port
+    vdns_pub_cpd:
+      properties:
+        ip_address: { get_input: vdns_pub_ip_address }
+      requirements:
+      - link: 
+          node: pub_network
+      - binding: 
+          node: vDNS
+      type: tosca.nodes.network.Port
     priv_network:
       properties:
-       network_name: { get_input: priv_network_name }
-       network_id: { get_input: priv_network_id }
-       cidr: { get_input: priv_network_cidr }
-       ip_version: 4
+        network_name: { get_input: priv_network_name }
+        network_id: { get_input: priv_network_id }
+        cidr: { get_input: priv_network_cidr }
+        ip_version: 4
       type: tosca.nodes.network.Network
+    vpg_priv_cpd:
+      properties:
+        ip_address: { get_input: vpg_priv_ip_address }
+      requirements:
+      - link: 
+          node: priv_network
+      - binding: 
+          node: vPG
+      type: tosca.nodes.network.Port
+    vlb_priv_cpd:
+      properties:
+        ip_address: { get_input: vlb_priv_ip_address }
+      requirements:
+      - link: 
+          node: priv_network
+      - binding: 
+          node: vLB
+      type: tosca.nodes.network.Port
+    vdns_priv_cpd:
+      properties:
+        ip_address: { get_input: vdns_priv_ip_address }
+      requirements:
+      - link: 
+          node: priv_network
+      - binding: 
+          node: vDNS
+      type: tosca.nodes.network.Port
     vPG_vLB_network:
       properties:
        network_name: { get_input: vpg_vlb_network_name }
@@ -252,6 +272,24 @@ topology_template:
        cidr: { get_input: vpg_vlb_network_cidr }
        ip_version: 4
       type: tosca.nodes.network.Network
+    vpg_vlb_cpd:
+      properties:
+       ip_address: { get_input: vpg_vlb_ip_address }
+      requirements:
+      - link: 
+          node: vPG_vLB_network
+      - binding: 
+          node: vPG
+      type: tosca.nodes.network.Port
+    vlb_vpg_cpd:
+      properties:
+       ip_address: { get_input: vlb_vpg_ip_address }
+      requirements:
+      - link: 
+          node: vPG_vLB_network
+      - binding: 
+          node: vLB
+      type: tosca.nodes.network.Port
     vLB_vDNS_network:
       properties:
        network_name: { get_input: vlb_vdns_network_name }
@@ -259,21 +297,35 @@ topology_template:
        cidr: { get_input: vlb_vdns_network_cidr }
        ip_version: 4
       type: tosca.nodes.network.Network
+    vlb_vdns_cpd:
+      properties:
+       ip_address: { get_input: vlb_vdns_ip_address }
+      requirements:
+      - link: 
+          node: vLB_vDNS_network
+      - binding: 
+          node: vLB
+      type: tosca.nodes.network.Port
+    vdns_vlb_cpd:
+      properties:
+       ip_address: { get_input: vdns_vlb_ip_address }
+      requirements:
+      - link: 
+          node: vLB_vDNS_network
+      - binding: 
+          node: vDNS
+      type: tosca.nodes.network.Port
   groups:
     Simple_vlb0..base_vlb..module-0:
-      type: org.openecomp.groups.VfModule
-      members:
-      - vPG
-      - vLB
-      - vDNS
+      type: org.openecomp.groups.heat.HeatStack
       properties:
-        min_vf_module_instances: 1
-        vf_module_label: base_vlb
-        max_vf_module_instances: 1
-        vfc_list:
-        vf_module_type: Base
-        vf_module_description:
-        initial_count: 1
-        volume_group: false
-        availability_zone_count:
+        heat_file: ../Artifacts/base_vlb.yaml
+        description: |
+          HOT template for router instance.
+    Simple_vlb0..dnsscaling..module-1:
+      type: org.openecomp.groups.heat.HeatStack
+      properties:
+        heat_file: ../Artifacts/dnsscaling.yaml
+        description: |
+          HOT template for router instance.
 tosca_definitions_version: tosca_simple_yaml_1_0

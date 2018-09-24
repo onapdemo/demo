@@ -6,64 +6,75 @@ metadata:
   id: vFW_A
   version: v1.0
   csarType: NFAR
-  name: vFW_A
+  name: vDNS
   vnfdVersion: v1.0
-  vnfmType: vnfm
-
+  vnfmType: vnfnm
+        
+imports:
+- openecomp_heat_index:
+    file: openecomp-heat/_index.yml
 topology_template:
   inputs:
-    vpg_pri_ip_address:
-     type: string
-     description: IP address to be used by PG for Private Network
-     default: 10.10.100.1
-    vpg_pub_ip_address:
-     type: string
-     description: IP adress to be used by PG for Public Network
-     default: 10.247.224.2
-    vpg_unproc_ip_address:
-     type: string
-     description: IP adress to be used by PG for Unproctected Network
-     default: 192.168.10.3
-    priv_network_name:
-     type: string
-     description: Network Name of Private Network for vFW
-     default: vFW_Private
-    pub_network_name:
-     type: string
-     description: Network Name of Public Network for vFW
-     default: vFW_Public
-    unproc_network_name:
-     type: string
-     description: Network Name of Unproctected Network for vFW
-     default: vFW_Unprotected
+    vpg_image_name:
+      type: string
+      description: Image Name for vPG vm 
+      default: fedora-18-x86_64.qcow1
+    vpg_flavor_name:
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
     vpg_vm_flavor_name:
-     type: string
-     description: Flavor Name for vPG vm 
-     default: m1.medium
-    pub_network_cidr:
-     type: string
-     description: Cidr Name for Public Network
-     default: 10.247.224.0/24
-    priv_network_cidr:
-     type: string
-     description: Cidr Name for Private Network
-     default: 10.10.100.0/24
-    unproc_network_cidr:
-     type: string
-     description: Cidr Name for Unprotected network
-     default: 192.168.10.0/24
+      type: string
+      description: Flavor Name for vPG vm 
+      default: m1.medium
+    vpg_pub_ip_address:
+      type: string
+      description: IP adress to be used by PG for Public Network
+      default: 10.247.224.2
+    pub_network_name:
+      type: string
+      description: Network Name of Public Network for vFW
+      default: vFW_Public
     pub_network_id:
-     type: string
-     description: Network ID for Public network
-     default: 192.168.10.0/24
+      type: string
+      description: Network ID for Public network
+      default: 192.168.10.0/24
+    pub_network_cidr:
+      type: string
+      description: Cidr Name for Public Network
+      default: 10.247.224.0/24
+    vpg_priv_ip_address:
+      type: string
+      description: IP adress to be used by PG for Public Network
+      default: 10.10.100.1
+    priv_network_name:
+      type: string
+      description: Network Name of Public Network for vFW
+      default: vFW_Private
     priv_network_id:
-     type: string
-     description: Network ID for Private network
-     default: 192.168.10.0/24
+      type: string
+      description: Network ID for Public network
+      default: 10.10.100.0/24
+    priv_network_cidr:
+      type: string
+      description: Cidr Name for Public Network
+      default: 10.10.100.0/24
+    vpg_unproc_ip_address:
+      type: string
+      description: IP adress to be used by PG for Public Network
+      default: 192.168.10.3
+    unproc_network_name:
+      type: string
+      description: Network Name of Public Network for vFW
+      default: vFW_Unprotected
     unproc_network_id:
-     type: string
-     description: Network ID for Unprotected network
-     default: 192.168.10.0/24
+      type: string
+      description: Network ID for Public network
+      default: 192.168.20.0/24
+    unproc_network_cidr:
+      type: string
+      description: Cidr Name for Public Network
+      default: 192.168.20.0/24
   node_templates:
     vpg_virtual_machine:
       type: tosca.nodes.SoftwareComponent
@@ -74,48 +85,32 @@ topology_template:
       requirements:
         - host: vPG
     vPG:
+      type: org.openecomp.resource.vfc.nodes.heat.nova.Server
+      properties:
+        flavor: {get_input: vpg_flavor_name}
+        image: {get_input: vpg_image_name}
       capabilities: 
         host:
           properties:    
             num_cpus: 2
             mem_size: 4 MB
-            name: { get_input: vpg_vm_flavor_name }
-      type: tosca.nodes.Compute
-    vpg_pub_cpd:
-      properties:
-        ip_address: { get_input: vpg_pub_ip_address }
-      requirements:
-      - link: pub_network
-      - binding: vPG
-      type: tosca.nodes.network.Port
-    vpg_unproc_cpd:
-      properties:
-        ip_address: { get_input: vpg_unproc_ip_address }
-      requirements:
-      - link: unproc_network
-      - binding: vPG
-      type: tosca.nodes.network.Port      
-    vpg_priv_cpd:
-      properties:
-       ip_address: { get_input: vpg_pri_ip_address }
-      requirements:
-      - link: priv_network
-      - binding: vPG
-      type: tosca.nodes.network.Port
+            name:  {get_input: vpg_vm_flavor_name}
     pub_network:
+      type: tosca.nodes.network.Network
       properties:
         network_name: { get_input: pub_network_name }
         network_id: { get_input: pub_network_id }
         cidr: { get_input: pub_network_cidr }
         ip_version: 4
-      type: tosca.nodes.network.Network
-    unproc_network:
+    vpg_pub_cpd:
+      type: tosca.nodes.network.Port
       properties:
-        network_name: { get_input: unproc_network_name }
-        network_id: { get_input: unproc_network_id }
-        cidr: { get_input: unproc_network_cidr }
-        ip_version: 4
-      type: tosca.nodes.network.Network      
+        ip_address: { get_input: vpg_pub_ip_address }
+      requirements:
+        - binding:
+            node: vPG
+        - link:
+            node: pub_network
     priv_network:
       properties:
        network_name: { get_input: priv_network_name }
@@ -123,19 +118,36 @@ topology_template:
        cidr: { get_input: priv_network_cidr }
        ip_version: 4
       type: tosca.nodes.network.Network
+    vpg_priv_cpd:
+      properties:
+       ip_address: { get_input: vpg_priv_ip_address }
+      requirements:
+      - link: 
+          node: priv_network
+      - binding: 
+          node: vPG
+      type: tosca.nodes.network.Port
+    unproc_network:
+      properties:
+        network_name: { get_input: unproc_network_name }
+        network_id: { get_input: unproc_network_id }
+        cidr: { get_input: unproc_network_cidr }
+        ip_version: 4
+      type: tosca.nodes.network.Network
+    vpg_unproc_cpd:
+      properties:
+        ip_address: { get_input: vpg_unproc_ip_address }
+      requirements:
+      - link: 
+          node: unproc_network
+      - binding: 
+          node: vPG
+      type: tosca.nodes.network.Port 
   groups:
     SimpleVpg..base_vpkg..module-0:
-      type: org.openecomp.groups.VfModule
-      members:
-      - vPG
+      type: org.openecomp.groups.heat.HeatStack
       properties:
-        min_vf_module_instances: 1
-        vf_module_label: base_vpkg
-        max_vf_module_instances: 1
-        vfc_list:
-        vf_module_type: Base
-        vf_module_description:
-        initial_count: 1
-        volume_group: false
-        availability_zone_count:
+        heat_file: ../Artifacts/base_vpkg.yaml
+        description: |
+          HOT template for router instance.
 tosca_definitions_version: tosca_simple_yaml_1_0

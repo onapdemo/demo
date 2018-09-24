@@ -1,0 +1,15 @@
+{
+  "importStructure": {
+    "heat": [
+      {
+        "fileName": "azurevdns.yaml",
+        "type": "HEAT",
+        "isBase": true
+      }, {
+        "fileName": "dnsscaling.yaml",
+        "type": "HEAT",
+        "isBase": false
+      }
+    ]
+  }
+}

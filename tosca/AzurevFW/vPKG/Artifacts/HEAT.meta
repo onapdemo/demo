@@ -1,0 +1,11 @@
+{
+  "importStructure": {
+    "heat": [
+      {
+        "fileName": "azurevpkg.yaml",
+        "type": "HEAT",
+        "isBase": true
+      }
+    ]
+  }
+}

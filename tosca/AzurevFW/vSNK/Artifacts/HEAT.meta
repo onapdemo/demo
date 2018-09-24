@@ -1,0 +1,11 @@
+{
+  "importStructure": {
+    "heat": [
+      {
+        "fileName": "azurevsnk.yaml",
+        "type": "HEAT",
+        "isBase": true
+      }
+    ]
+  }
+}

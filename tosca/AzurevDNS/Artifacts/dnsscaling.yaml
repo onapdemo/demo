@@ -1,0 +1,20 @@
+description: HOT template for router instance.
+heat_template_version: 2013-05-23
+parameters:
+  public_net: {description: public network id, type: string, default: 2c921f24-7e22-40f0-af62-e6801bff0ae1}
+  uc3_v1_net_id: {description: private net, type: string}  
+  uc3_v1_subnet_id: {description: private subnet, type: string}
+  
+resources:
+    
+  router1:
+        type: OS::Neutron::Router
+        properties:
+          external_gateway_info:
+                network: { get_param: public_net }
+                
+  router1_interface:
+        type: OS::Neutron::RouterInterface
+        properties:
+          router_id: { get_resource: router1 }
+          subnet_id: { get_param: uc3_v1_subnet_id }

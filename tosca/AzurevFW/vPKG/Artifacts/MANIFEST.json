@@ -1,0 +1,12 @@
+{
+  "name": "azurevpkg",
+  "description": "azurevpkg",
+  "version": "3.1",
+  "data": [
+    {
+      "isBase": true,
+      "file": "azurevpkg.yaml",
+      "type": "HEAT"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "azurevdns",
+  "description": "azurevdns",
+  "version": "3.1",
+  "data": [
+    {
+      "isBase": true,
+      "file": "azurevdns.yaml",
+      "type": "HEAT"
+    },
+	{
+      "isBase": false,
+      "file": "dnsscaling.yaml",
+      "type": "HEAT"
+    }
+  ]
+}
